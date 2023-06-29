@@ -1,9 +1,11 @@
 <div class="recipe recipe-list-item">
+    {% if recipe.cover.url is not Null%}
     <div class="recipe-cover">
         <a href="{% url 'recipes:recipe' recipe.id %}">
             <img src="{{recipe.cover.url}}" alt="">
         </a>
     </div>
+    {% endif %}
     <div class="recipe-title-container">
         <a href="{% url 'recipes:recipe' recipe.id %}">
         <h2 class="recipe-title">{{recipe.title}}</h2>
@@ -47,7 +49,7 @@
         <div class="recipe-meta recipe-preparation">
             <h3 class="recipe-meta-title"><i class="fas fa-stopwatch"></i> Preparo</h3>
             <div class="recipe-meta-text">
-                {{recipe.preparation_time}} {{preparation_time_unit}}
+                {{recipe.preparation_time}} {{recipe.preparation_time_unit}}
             </div>
         </div>
         <div class="recipe-meta recipe-servings">
