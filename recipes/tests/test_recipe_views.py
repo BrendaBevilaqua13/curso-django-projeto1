@@ -1,10 +1,10 @@
-from django.test import TestCase
+from .test_recipe_base import RecipeTestBase
 from django.urls import reverse, resolve
 from recipes import views
-from recipes.models import Category, Recipe, User
+from recipes.models import Recipe
 
 
-class RecipeViewsTest(TestCase):
+class RecipeViewsTest(RecipeTestBase):        
     def test_recipe_home_view_function_is_correct(self):
         view = resolve(reverse('recipes:home'))
         self.assertIs(view.func, views.home)
@@ -18,33 +18,11 @@ class RecipeViewsTest(TestCase):
         self.assertTemplateUsed(response, 'recipes/pages/home.html')
         
     def test_recipe_home_template_shows_not_recipes_found_if_no_recipes(self):
+         Recipe.objects.get(pk=1).delete()
          response = self.client.get(reverse('recipes:home'))
          self.assertIn('Nenhuma Receita', response.content.decode('utf-8')) 
      
-    def test_recipe_home_template_loads_recipes(self):
-        categoria = Category.objects.create(name='Category')
-        author = User.objects.create_user(
-            first_name='brenda',
-            last_name='carla',
-            username='brendac.',
-            password='12345',
-            email='brenda@gmail.com',
-        )
-        recipe = Recipe.objects.create(
-            category = categoria,
-            author = author,
-            title = 'Recipe title',
-            description ='Recipe description',
-            slug ='Recipe slug',
-            preparation_time = 10,
-            preparation_time_unit = 'Minutos',
-            servings = 5,
-            cover = None,
-            servings_unit = 'Porções',
-            preparation_steps = 'Recipe preparation_steps',
-            preparation_steps_is_html = False,
-            is_published = True,
-        )
+    def test_recipe_home_template_loads_recipes(self):  
         response = self.client.get(reverse('recipes:home'))
         content = response.content.decode('utf-8')
         response_recipe_context = response.context['recipes']
@@ -60,6 +38,7 @@ class RecipeViewsTest(TestCase):
         self.assertIs(view.func, views.category)
         
     def test_recipe_category_view_returns_404_if_no_recipes_found(self):
+        Recipe.objects.get(pk=1).delete()
         response = self.client.get(reverse('recipes:category', kwargs={'category_id': 1}))
         self.assertEqual(response.status_code, 404)
         
@@ -68,6 +47,7 @@ class RecipeViewsTest(TestCase):
         self.assertIs(view.func, views.recipe)
     
     def test_recipe_datail_view_returns_404_if_no_recipes_found(self):
+        Recipe.objects.get(pk=1).delete()
         response = self.client.get(reverse('recipes:recipe', kwargs={'id': 1}))
         self.assertEqual(response.status_code, 404)
         
