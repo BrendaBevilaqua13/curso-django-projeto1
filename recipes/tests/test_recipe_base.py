@@ -3,17 +3,29 @@ from recipes.models import Category, Recipe, User
 
 class RecipeTestBase(TestCase):
     def setUp(self):
-        categoria = Category.objects.create(name='Category')
-        author = User.objects.create_user(
-            first_name='brenda',
+        return super().setUp()
+    
+    def make_category(self, name='Category'):
+        return Category.objects.create(name=name)
+    
+    
+    def make_author(self,first_name='brenda',
             last_name='carla',
             username='brendac.',
             password='12345',
-            email='brenda@gmail.com',
+            email='brenda@gmail.com'):
+        
+        return User.objects.create_user(
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            password=password,
+            email= email
         )
-        recipe = Recipe.objects.create(
-            category = categoria,
-            author = author,
+    
+    def make_recipe(self,
+            category_data = None,
+            author_data = None,
             title = 'Recipe title',
             description ='Recipe description',
             slug ='Recipe slug',
@@ -24,8 +36,28 @@ class RecipeTestBase(TestCase):
             servings_unit = 'Porções',
             preparation_steps = 'Recipe preparation_steps',
             preparation_steps_is_html = False,
-            is_published = True,
+            is_published = True):
+        
+        if category_data is None:
+            category_data = {}
+        if author_data is None:
+            author_data = {}
+        
+        return Recipe.objects.create(
+            category = self.make_category(**category_data),
+            author = self.make_author(**author_data),
+            title = title,
+            description = description,
+            slug = slug,
+            preparation_time = preparation_time,
+            preparation_time_unit = preparation_time_unit,
+            servings = servings,
+            cover = cover,
+            servings_unit = servings_unit,
+            preparation_steps = preparation_steps,
+            preparation_steps_is_html = preparation_steps_is_html,
+            is_published = is_published,
         )
-        return super().setUp()
+                
         
     
