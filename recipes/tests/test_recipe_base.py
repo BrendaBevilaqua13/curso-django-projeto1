@@ -32,7 +32,7 @@ class RecipeTestBase(TestCase):
             preparation_time = 10,
             preparation_time_unit = 'Minutos',
             servings = 5,
-            cover = None,
+            cover=None,
             servings_unit = 'Porções',
             preparation_steps = 'Recipe preparation_steps',
             preparation_steps_is_html = False,
