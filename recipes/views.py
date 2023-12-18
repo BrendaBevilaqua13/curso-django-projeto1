@@ -22,5 +22,5 @@ def recipe(request, id):
     return render(request, 'recipes/pages/recipe_view.html',
                   {'recipe': recipe, 'is_detail_page': True})
 
-def search(requets):
-    ...
+def search(request):
+    return render(request, 'recipes/pages/search.html')
