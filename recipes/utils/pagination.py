@@ -1,6 +1,11 @@
 from django.core.paginator import Paginator
 from recipes.utils.test_pagination import make_pagination_range
 
+""" Gerador de senha
+python -c "import string as s;from random import SystemRandom as sr;
+print(''.join(sr().choices(s.ascii_letters + s.punctuation, k=64)))" 
+"""
+
 def make_pagination(request, queryset, per_page, qty_pages=4):
     try:
         current_page = int(request.GET.get('page', 1))
