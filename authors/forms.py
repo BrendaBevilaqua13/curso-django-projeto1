@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+import re
 
 def add_placeholder(field,placeholder_val):
     field.widget.attrs['placeholder'] = placeholder_val
@@ -53,10 +54,25 @@ class RegisterForm(forms.ModelForm):
 
     def clean_password(self):
         data = self.cleaned_data.get('password')
+        regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
 
-        if 'atenção' in data:
+        if not regex.match(data):
             raise ValidationError(
-                'Não digite "atenção" no campo password',
+               'Password must have at least one uppercase letter, '
+            'one lowercase letter and one number. The length should be '
+            'at least 8 characters.',
+                code='invalid'
+
+            )
+
+        return data
+    
+    def clean_first_name(self):
+        data = self.cleaned_data.get('first_name')
+
+        if not data.strip():
+            raise ValidationError(
+                'Digite algo no campo first name',
                 code='invalid'
 
             )
