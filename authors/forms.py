@@ -22,7 +22,8 @@ class RegisterForm(forms.ModelForm):
     password2 = forms.CharField(required=True,
                                 widget=forms.PasswordInput(attrs={
                                     'placeholder':'Repeat your password'
-                                }))
+                                }),
+                                label='Password2')
 
     class Meta:
         model= User
