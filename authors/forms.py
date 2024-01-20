@@ -15,6 +15,8 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['email'],'Your e-mail')
         add_placeholder(self.fields['first_name'],'Ex.: Alex')
         add_placeholder(self.fields['last_name'],'Ex.: Winchester')
+        add_placeholder(self.fields['password'],'Type your password')
+
 
 
     password2 = forms.CharField(required=True,
@@ -46,11 +48,6 @@ class RegisterForm(forms.ModelForm):
             }
         }
 
-        widgets = {
-            'password': forms.PasswordInput(attrs={
-                'placeholder': 'Type your password here'
-            })
-        }
 
     def clean_password(self):
         data = self.cleaned_data.get('password')
