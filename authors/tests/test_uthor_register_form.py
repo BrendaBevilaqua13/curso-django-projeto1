@@ -56,6 +56,11 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
 
     @parameterized.expand([
         ('username', 'This field must not be empty'),
+        ('password','Este campo é obrigatório.'),
+        ('password2','Password and Password2 must be equal'),
+        ('first_name','Write your first name'),
+        ('last_name','Write your last name'),
+        ('email','E-mail is required'),
     ])
     def test_fields_cannot_be_empty(self, field, msg):
         self.form_data[field] = ''
