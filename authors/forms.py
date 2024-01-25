@@ -82,19 +82,8 @@ class RegisterForm(forms.ModelForm):
             )
 
         return data
-    
-    def clean_first_name(self):
-        data = self.cleaned_data.get('first_name')
 
-        if not data.strip():
-            raise ValidationError(
-                'Digite algo no campo first name',
-                code='invalid'
-
-            )
-
-        return data
-    
+   
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
