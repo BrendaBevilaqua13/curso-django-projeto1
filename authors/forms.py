@@ -18,6 +18,15 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['password'],'Type your password')
 
 
+    username = forms.CharField(
+        label = 'Username',
+        help_text = {'The length should be between 4 and 150 characters.'},
+        error_messages={
+            'min_length': 'Username must have at least 4 characters.',
+            'max_length': 'Username must have less than 150 characters.'
+        },
+        min_length=4, max_length=150,
+    )
     first_name = forms.CharField(
         error_messages={'required':'Write your first name'},
         label='First Name',
