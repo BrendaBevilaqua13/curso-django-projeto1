@@ -44,7 +44,8 @@ class RegisterForm(forms.ModelForm):
     )
     password = forms.CharField(widget=forms.PasswordInput(attrs={
                                     'placeholder':'Your password'
-                                }))
+                                }),
+                                label='Password',)
     password2 = forms.CharField(required=True,
                                 widget=forms.PasswordInput(attrs={
                                     'placeholder':'Repeat your password'
