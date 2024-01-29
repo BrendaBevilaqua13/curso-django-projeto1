@@ -118,7 +118,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         response = self.client.post(url)
         self.assertEqual(response.status_code,404)
 
-    # TypeError: argument of type 'NoneType' is not iterable
+    
     def test_email_field_must_be_unique(self):
         url = reverse('create')
 
@@ -131,3 +131,21 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
              self.assertIn(msg,errors)
              self.assertIn(msg,response.content.decode('utf-8'))
 
+    
+    def test_author_created_can_login(self):
+        url = reverse('create')
+
+        self.form_data.update({
+                    'username': 'testeuser',
+                    'password': '@Bc123456',
+                    'password2':'@Bc123456',
+            })
+
+        self.client.post(url, data=self.form_data, follow=True)
+
+        is_authenticated = self.client.login(
+            username='testeuser',
+            password='@Bc123456'
+        )
+        
+        self.assertTrue(is_authenticated)
