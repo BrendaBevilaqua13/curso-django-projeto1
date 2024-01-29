@@ -54,7 +54,11 @@
         font-family: (--font-primary);
         background: var(--color-gray-1);
         color: var(--color-dark-text);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
         }
+
         h1,h2,h3,h4,h5,h6{
         font-family: var(--font-headings);
         }
@@ -127,6 +131,10 @@
         background: var(--color-gray-2);
         }
 
+        .main-content-container{
+        flex-grow: 1;
+        }
+        
         .main-content{
         padding-top: 0;
         }
@@ -148,7 +156,7 @@
 
         .recipe img{
         max-width: 100%;
-
+        max-height: 350px;
         }
 
         .recipe-list-item{
@@ -244,7 +252,7 @@
         justify-content: space-between;
         background: var(--color-primary-dark);
         color: var(--color-white);
-        padding: var(--spacing-gutter-large);
+        padding: var(--spacing-gutter-large); 
         }
 
         .main-footer a{
