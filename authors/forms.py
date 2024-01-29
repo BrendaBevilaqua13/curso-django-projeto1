@@ -20,7 +20,7 @@ class RegisterForm(forms.ModelForm):
 
     username = forms.CharField(
         label = 'Username',
-        help_text = {'The length should be between 4 and 150 characters.'},
+        help_text = 'The length should be between 4 and 150 characters.',
         error_messages={
             'min_length': 'Username must have at least 4 characters.',
             'max_length': 'Username must have less than 150 characters.'
@@ -38,10 +38,8 @@ class RegisterForm(forms.ModelForm):
     email = forms.EmailField(
         error_messages={'required':'E-mail is required'},
         label='E-mail',
-        help_text = {
-            'email': 'The e-mail must be valid',
-        }
-    )
+        help_text ='The e-mail must be valid'
+        )
     password = forms.CharField(widget=forms.PasswordInput(attrs={
                                     'placeholder':'Your password'
                                 }),
