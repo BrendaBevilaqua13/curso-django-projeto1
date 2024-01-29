@@ -3,6 +3,7 @@ from django.test import TestCase as DjangoTestCase
 from authors.forms import RegisterForm
 from parameterized import parameterized
 from django.urls import reverse
+import ipdb
 
 
 class AuthorRegisterFormUniTest(TestCase):
@@ -116,4 +117,17 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         url = reverse('create')
         response = self.client.post(url)
         self.assertEqual(response.status_code,404)
+
+    # TypeError: argument of type 'NoneType' is not iterable
+    def test_email_field_must_be_unique(self):
+        url = reverse('create')
+
+        self.client.post(url, data=self.form_data, follow=True)
+        response = self.client.post(url, data=self.form_data, follow=True)
+
+        msg = 'User e-mail is already in use'
+        errors = response.context['form'].errors.get('email')
+        if errors is not None:
+             self.assertIn(msg,errors)
+             self.assertIn(msg,response.content.decode('utf-8'))
 

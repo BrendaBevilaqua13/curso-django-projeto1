@@ -42,6 +42,9 @@ class RegisterForm(forms.ModelForm):
             'email': 'The e-mail must be valid',
         }
     )
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+                                    'placeholder':'Your password'
+                                }))
     password2 = forms.CharField(required=True,
                                 widget=forms.PasswordInput(attrs={
                                     'placeholder':'Repeat your password'
@@ -82,7 +85,17 @@ class RegisterForm(forms.ModelForm):
             )
 
         return data
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '')
+        exists = User.objects.filter(email=email).exists()
 
+        if exists:
+            raise ValidationError(
+                'User e-mail is already in use', code='invalid',
+            )
+
+        return email
    
     def clean(self):
         cleaned_data = super().clean()
