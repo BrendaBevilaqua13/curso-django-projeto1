@@ -2,7 +2,7 @@
     {% if recipe.cover.url is not Null%}
     <div class="recipe-cover">
         <a href="{% url 'recipes:recipe' recipe.id %}">
-            <img src="{{recipe.cover.url}}" alt="">
+            <img src="{{recipe.cover.url}}" alt="" width="100%">
         </a>
     </div>
     {% endif %}
