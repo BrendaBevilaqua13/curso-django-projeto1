@@ -25,7 +25,7 @@ class AuthorRegisterFormUniTest(TestCase):
     ])
     def test_fields_help_text_is_correct(self, field, needed):
         form = RegisterForm()
-        current = form[field].field.help_text.get(field)
+        current = form[field].field.help_text
         self.assertEqual(needed, current)
 
     @parameterized.expand([
