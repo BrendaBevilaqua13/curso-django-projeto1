@@ -1,9 +1,10 @@
 from django.shortcuts import render,HttpResponse, redirect
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm
 from django.http import Http404
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse
+
 
 def register_view(request):
    register_form_data = request.session.get('register_form_data', None)
@@ -31,7 +32,11 @@ def register_create(request):
  
 
 def login_view(request):
-   return render(request, 'authors/pages/login.html')
+   form = LoginForm()
+   return render(request, 'authors/pages/login.html',{
+      'form':form,
+      'form_action': reverse('login')
+   })
 
 def login_create(request):
    return render(request, 'authors/pages/login.html')
