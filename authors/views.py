@@ -4,13 +4,15 @@ from django.http import Http404
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse
+from django.contrib.auth import authenticate, login
 
 
 def register_view(request):
    register_form_data = request.session.get('register_form_data', None)
    form = RegisterForm(register_form_data)
    return render(request, 'authors/pages/register_view.html',
-                 {'form':form,})
+                 {'form':form,
+                  'form_action': reverse('create'),})
 
 
 def register_create(request):
@@ -35,8 +37,30 @@ def login_view(request):
    form = LoginForm()
    return render(request, 'authors/pages/login.html',{
       'form':form,
-      'form_action': reverse('login')
+      'form_action': reverse('login_create'), 
    })
 
 def login_create(request):
-   return render(request, 'authors/pages/login.html')
+   var = ''
+   if not request.POST:
+      raise Http404() 
+   
+   form = LoginForm(request.POST)
+   
+   if form.is_valid():
+      authenticated_user = authenticate(
+         username=form.cleaned_data.get('username',''),
+         password=form.cleaned_data.get('password',''),
+      )
+      var = 'maria'
+      if authenticated_user is not None:
+         messages.success(request, 'Your are Logged in.')
+         login(request, authenticated_user)
+         var = 'sucesso'
+      else:     
+         messages.error(request,'Invalid credentials')
+         var = 'erro'
+   else:
+      messages.error(request,'Invalid username or password')
+
+   return redirect('login')
