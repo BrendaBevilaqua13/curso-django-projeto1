@@ -409,4 +409,17 @@
         border-radius:1rem;  
         border: 1px solid var(--color-primary-dark);
         }
+
+        .inline-form{
+            display: inline;
+            font-size: 5rem;
+        }
+
+        .plaintext-button{
+            display: inline;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: var(--color-primary);
+        }
     

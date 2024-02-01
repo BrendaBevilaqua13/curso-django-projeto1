@@ -139,3 +139,5 @@ constants.INFO: 'message-info',
 constants.SUCCESS: 'message-success',
 constants.WARNING: 'message-warning',
 }
+
+# LOGOUT_REDIRECT_URL = "login"
