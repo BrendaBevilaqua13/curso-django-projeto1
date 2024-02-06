@@ -60,7 +60,9 @@ class RecipeMixin:
     def make_recipe_in_bach(self, qdt=10):
         recipes = []
         for i in range(qdt):
-            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            kwargs = {'title':f'Recipe title {i}',
+                'slug': f'r{i}',
+                'author_data': {'username': f'u{i}'}}
             recipe = self.make_recipe(**kwargs)
             recipes.append(recipe)
 
