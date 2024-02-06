@@ -56,6 +56,15 @@ class RecipeMixin:
             preparation_steps_is_html = preparation_steps_is_html,
             is_published = is_published,
         )
+    
+    def make_recipe_in_bach(self, qdt=10):
+        recipes = []
+        for i in range(qdt):
+            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            recipe = self.make_recipe(**kwargs)
+            recipes.append(recipe)
+
+        return recipes
                 
 
 
