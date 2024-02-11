@@ -66,12 +66,14 @@ def login_create(request):
 
 @login_required(login_url='login', redirect_field_name='next')
 def logout_view(request):
-
    if not request.POST:
+      messages.error(request, 'Invalid logout request')
       return redirect('login')
    
+   messages.error(request,'Invalid logout user')
    if request.POST.get('username') != request.user.username:
       return redirect('login')
    
+   messages.success(request,'Logged out successfully')
    logout(request)
    return redirect('login')
