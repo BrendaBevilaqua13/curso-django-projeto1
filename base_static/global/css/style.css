@@ -368,6 +368,10 @@
         color: var(--color-debug-dark);
         }
 
+        .login-message{
+            margin: 1rem 0;
+        }
+
         /* Forms */
         .form-content{
         max-width: 64 rem;
