@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import make_password
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from recipes.models import Recipe
 
 def register_view(request):
    register_form_data = request.session.get('register_form_data', None)
@@ -80,4 +81,11 @@ def logout_view(request):
 
 @login_required(login_url='login', redirect_field_name='next')
 def dashboard(request):
-   return render(request,'authors/pages/dashboard.html')
+   recipes = Recipe.objects.filter(
+      is_published=False,
+      author=request.user
+   )
+   return render(request,'authors/pages/dashboard.html',
+                 {
+                    'recipes':recipes
+                 })
