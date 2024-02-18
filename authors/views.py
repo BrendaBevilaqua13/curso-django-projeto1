@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse, redirect
-from .forms import RegisterForm, LoginForm, AuthorRecipeForm
+from .forms import RegisterForm, LoginForm, AuthorRecipeForm, AuthorRecipeCreateForm
 from django.http import Http404
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from recipes.models import Recipe
+from django.template.defaultfilters import slugify
 
 def register_view(request):
    register_form_data = request.session.get('register_form_data', None)
@@ -124,3 +125,26 @@ def dashboard_recipe_edit(request,id):
                  {
                     'form':form
                  })
+
+def dashboard_recipe_create(request):
+   if request.method == 'POST':
+      POST = request.POST
+      FILES = request.FILES
+      form = AuthorRecipeCreateForm(POST,FILES)
+      if form.is_valid():
+
+         recipe = form.save(commit=False)
+         recipe.author = request.user
+         recipe.slug = slugify(request.POST.get('title'))
+         recipe.preparation_steps_is_html = False
+         recipe.is_published = False
+         recipe.save()
+
+         messages.success(request,'Sua receita foi criada com sucesso!')
+         return redirect('dashboard')
+   
+   form = AuthorRecipeCreateForm()
+
+   return render(request,'authors/pages/dashboard_recipe.html',
+                {'form':form,
+                  'form_action': reverse('dashboard_recipe_create')})
