@@ -1,5 +1,5 @@
 from django.shortcuts import render,HttpResponse, redirect
-from .forms import RegisterForm, LoginForm, AuthorRecipeForm, AuthorRecipeCreateForm
+from .forms import RegisterForm, LoginForm, AuthorRecipeForm
 from django.http import Http404
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
@@ -130,7 +130,7 @@ def dashboard_recipe_create(request):
    if request.method == 'POST':
       POST = request.POST
       FILES = request.FILES
-      form = AuthorRecipeCreateForm(POST,FILES)
+      form = AuthorRecipeForm(POST,FILES)
       if form.is_valid():
 
          recipe = form.save(commit=False)
@@ -142,8 +142,10 @@ def dashboard_recipe_create(request):
 
          messages.success(request,'Sua receita foi criada com sucesso!')
          return redirect('dashboard')
+      else:
+         return render(request,'authors/pages/dashboard_recipe.html',{'form':form})
    
-   form = AuthorRecipeCreateForm()
+   form = AuthorRecipeForm()
 
    return render(request,'authors/pages/dashboard_recipe.html',
                 {'form':form,
