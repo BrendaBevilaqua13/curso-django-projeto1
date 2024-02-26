@@ -77,8 +77,8 @@ class DashboardRecipe(View):
             login_required,name='dispatch'
     )
 class DashboardRecipeDelete(DashboardRecipe):
-    def post(self, request, id=None):  
-        recipe = self.get_recipe(id)
+    def post(self, request, *args, **kwargs):  
+        recipe = self.get_recipe(self.request.POST.get('id'))
         recipe.delete()
         messages.success(request, 'Receita deletada com sucesso!')
         return redirect('dashboard')
