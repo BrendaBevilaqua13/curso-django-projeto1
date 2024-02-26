@@ -66,6 +66,7 @@ def login_create(request):
 
    return redirect('dashboard')
 
+
 @login_required(login_url='login', redirect_field_name='next')
 def logout_view(request):
    if not request.POST:
@@ -80,6 +81,7 @@ def logout_view(request):
    logout(request)
    return redirect('login')
 
+
 @login_required(login_url='login', redirect_field_name='next')
 def dashboard(request):
    recipes = Recipe.objects.filter(
@@ -91,31 +93,6 @@ def dashboard(request):
                     'recipes':recipes
                  })
 
-@login_required(login_url='login',redirect_field_name='next')
-def dashboard_recipe_create(request):
-   if request.method == 'POST':
-      POST = request.POST
-      FILES = request.FILES
-      form = AuthorRecipeForm(POST,FILES)
-      if form.is_valid():
-
-         recipe = form.save(commit=False)
-         recipe.author = request.user
-         recipe.slug = slugify(request.POST.get('title'))
-         recipe.preparation_steps_is_html = False
-         recipe.is_published = False
-         recipe.save()
-
-         messages.success(request,'Sua receita foi criada com sucesso!')
-         return redirect('dashboard')
-      else:
-         return render(request,'authors/pages/dashboard_recipe.html',{'form':form})
-   
-   form = AuthorRecipeForm()
-
-   return render(request,'authors/pages/dashboard_recipe.html',
-                {'form':form,
-                  'form_action': reverse('dashboard_recipe_create')})
 
 @login_required(login_url='login', redirect_field_name='next')
 def dashboard_recipe_delete(request):

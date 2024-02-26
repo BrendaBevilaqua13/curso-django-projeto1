@@ -6,10 +6,14 @@ from django.contrib import messages
 from django.shortcuts import redirect,render
 from django.urls import reverse
 from django.template.defaultfilters import slugify
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 import ipdb
 
 
-
+@method_decorator(
+            login_required,name='dispatch'
+    )
 class DashboardRecipe(View):
     recipe = None
 
@@ -36,6 +40,7 @@ class DashboardRecipe(View):
                         })
 
 
+    
     def get(self, request, id=None):
         recipe = self.get_recipe(id)     
         form = AuthorRecipeForm(instance=recipe)
