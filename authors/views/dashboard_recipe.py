@@ -5,6 +5,7 @@ from authors.forms.recipe_forms import AuthorRecipeForm
 from django.contrib import messages
 from django.shortcuts import redirect,render
 from django.urls import reverse
+from django.template.defaultfilters import slugify
 import ipdb
 
 
@@ -12,10 +13,10 @@ import ipdb
 class DashboardRecipe(View):
     recipe = None
 
-    def get_recipe(self, id):
+    def get_recipe(self, id=None):
         recipe = None
 
-        if id:
+        if id is not None:
             recipe = Recipe.objects.filter(
                 is_published=False,
                 author=self.request.user,
@@ -35,13 +36,13 @@ class DashboardRecipe(View):
                         })
 
 
-    def get(self, request, id):
+    def get(self, request, id=None):
         recipe = self.get_recipe(id)     
         form = AuthorRecipeForm(instance=recipe)
 
         return self.render_recipe(form)
     
-    def post(self,request, id):
+    def post(self,request, id=None):
         recipe = self.get_recipe(id)
         form = AuthorRecipeForm(
             request.POST or None,
@@ -57,9 +58,12 @@ class DashboardRecipe(View):
             recipe.author=request.user
             recipe.preparation_steps_is_html = False
             recipe.is_published = False
+            
+            if id is None:
+                recipe.slug = slugify(request.POST.get('title'))
 
             recipe.save()
             messages.success(request,'Sua receita foi salva com sucesso!')
-            return redirect(reverse('dashboard_recipe_edit',args=(id,)))
+            return redirect(reverse('dashboard_recipe_edit',args=(recipe.id,)))
         
         return self.render_recipe(form)
