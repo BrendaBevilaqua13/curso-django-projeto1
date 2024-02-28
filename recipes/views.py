@@ -1,7 +1,5 @@
-from django.shortcuts import render, get_list_or_404, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.http.response import Http404
-from django.db.models import Q
-from django.core.paginator import Paginator
 from recipes.utils.pagination import make_pagination
 from .models import Recipe
 from django.views.generic import ListView
@@ -43,25 +41,42 @@ class RecipeListViewCategory(RecipeListViewBase):
     template_name = 'recipes/pages/category.html'
 
 
-    def get_quereyset(self,*args,**kwargs):
-        qs = super().get_queryset(*args,**kwargs)
-        id = self.args.get(self.pk_url_args)
-        qs = qs.filter(category__id=id,is_published=True).order_by('id')
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        qs = qs.filter(
+            category__id=self.kwargs.get('category_id')
+        )
+
+        if not qs:
+            raise Http404()
 
         return qs
+    
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx.update({
+            'title': f'{ctx.get("recipes")[0].category.name} - Category |',
+        })
+
+        return ctx
+
     
 class RecipeListViewSearch(RecipeListViewBase):
     template_name = 'recipes/pages/search.html'
 
     def get_queryset(self):
         txt_search = self.request.GET.get('search')
+
+        if not txt_search:
+            raise Http404()
+
         qs = Recipe.objects.filter(title__icontains=txt_search,
                                    is_published=True)
         return qs
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        search_term = self.request.GET.get('q', '')
+        search_term = self.request.GET.get('search')
 
         ctx.update({
             'page_title': f'Search for "{search_term}" |',

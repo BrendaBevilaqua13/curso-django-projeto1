@@ -7,10 +7,10 @@ from recipes.models import Recipe
 class RecipeCategoryViewTest(RecipeTestBase):                 
     def test_recipe_category_view_function_is_correct(self):
         view = resolve(reverse('recipes:category', kwargs={'category_id': 1}))
-        self.assertIs(view.func, views.category)
+        self.assertIs(view.func.view_class, views.RecipeListViewCategory)
         
     def test_recipe_category_view_returns_404_if_no_recipes_found(self):
-        response = self.client.get(reverse('recipes:category', kwargs={'category_id': 1}))
+        response = self.client.get(reverse('recipes:category', kwargs={'category_id':1}))
         self.assertEqual(response.status_code, 404)
         
     def test_recipe_category_template_loads_recipes(self):
